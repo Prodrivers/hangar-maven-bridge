@@ -55,6 +55,7 @@ jobs:
       meta-version: ${{ steps.meta.outputs.version }}
       meta-labels: ${{ steps.meta.outputs.labels }}
       meta-json: ${{ steps.meta.outputs.json }}
+      meta-tags: ${{ steps.meta.outputs.tags }}
 
   build:
     needs:
@@ -156,7 +157,7 @@ jobs:
       - name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
-          docker buildx imagetools create $(jq -r '"-t " + (.tags | join(" -t "))' <<< '${{ needs.prepare.outputs.meta-json }}') \
+          docker buildx imagetools create $(echo "${{ needs.prepare.outputs.meta-tags }}" | sed 's/^/-t /' | tr '\n' ' ') \
             $(printf '${{ needs.prepare.outputs.image }}@sha256:%s ' *)
 
       - name: Inspect image
