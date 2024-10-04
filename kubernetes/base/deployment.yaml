@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hangar-maven-bridge
+  labels:
+    app: hangar-maven-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hangar-maven-bridge
+  template:
+    metadata:
+      labels:
+        app: hangar-maven-bridge
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/prodrivers/hangar-maven-bridge:edge
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: hangar-maven-bridge-config
+                optional: false
+            - secretRef:
+                name: hangar-maven-bridge-secrets
+                optional: true
+          resources:
+            limits:
+              memory: 64Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          imagePullPolicy: Always
+      restartPolicy: Always
