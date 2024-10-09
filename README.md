@@ -5,14 +5,14 @@ A bridge application that exposes PaperMC's Hangar as a Maven repository, so tha
 ## Features
 
 * Exposes Hangar resources as Maven resources, using the "io.papermc.hangar.<platform>" group ID.
-* Supports Paper, Velocity and Waterfall resources
+* Supports Paper, Velocity and Waterfall resources.
 * Supports release channels: append ".<channel>" to the group ID.
 
 Note: this bridge does not have support for authentication. If you want to limit usage of your instance, please protect it with a reverse proxy.
 
 ## Usage
 
-Use the Docker image with port 80, or install dependencies using `pip install .` and run `with python app/main.py`.
+Use the Docker image with port 80, or install dependencies using `pip install .` and run with Python `app/main.py`.
 
 The Maven repository is accessible at sub-path `/repository/`.
 
