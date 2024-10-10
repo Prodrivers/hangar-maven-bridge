@@ -6,12 +6,11 @@ from fastapi_cache.decorator import cache
 from fastapi_xml import XmlAppResponse
 
 from app.hangar import fetch_version_metadata, platform_type
-from app.models import project
 from app.settings import settings
 
 router = APIRouter()
 
-@router.get("/repository/io/papermc/hangar/{platform}/{channel}/{slug}/{version}/{filename}.pom", response_class=XmlAppResponse, response_model=project, tags=["with_platform_and_channel"])
+@router.get("/repository/io/papermc/hangar/{platform}/{channel}/{slug}/{version}/{filename}.pom", response_class=XmlAppResponse, tags=["with_platform_and_channel"])
 @cache(expire=settings.cache.pom_expiration)
 async def get_pom_with_platform_and_channel(platform: platform_type, slug: str, channel: Optional[str], version: str, filename: str) -> Response:
     # Check that the filename matches the pattern "{slug}-{version}.pom"
@@ -49,7 +48,7 @@ async def get_pom_with_platform_and_channel(platform: platform_type, slug: str, 
 """
     return Response(content=pom_content.strip(), media_type="application/xml")
 
-@router.get("/repository/io/papermc/hangar/{platform}/{slug}/{version}/{filename}.pom", response_class=XmlAppResponse, response_model=project, tags=["with_platform"])
+@router.get("/repository/io/papermc/hangar/{platform}/{slug}/{version}/{filename}.pom", response_class=XmlAppResponse, tags=["with_platform"])
 @cache(expire=settings.cache.pom_expiration)
 async def get_pom_with_platform(platform: platform_type, slug: str, version: str, filename: str) -> Response:
     return await get_pom_with_platform_and_channel(platform=platform, channel=None, slug=slug, version=version, filename=filename)
