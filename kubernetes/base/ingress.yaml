@@ -6,7 +6,7 @@ metadata:
     cert-manager.io/issuer: prod-issuer
     cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
     cert-manager.io/issuer-kind: ClusterOriginIssuer
-    traefik.ingress.kubernetes.io/router.middlewares: hangar-maven-bridge-basic-auth@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: mc-web-services-hangar-maven-bridge-basic-auth@kubernetescrd
 spec:
   ingressClassName: traefik
   tls:
