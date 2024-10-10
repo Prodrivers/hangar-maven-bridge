@@ -1,4 +1,4 @@
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 import httpx
 from fastapi import HTTPException
@@ -9,7 +9,7 @@ platform_type = Literal["paper", "velocity", "waterfall"]
 
 # Fetch project metadata from the Hangar API, with caching
 @cache(expire=settings.hangar.cache_project_expiration)
-async def fetch_project_metadata(slug: str):
+async def fetch_project_metadata(slug: str) -> dict[str, any]:
     url = f"{settings.hangar.api_base_url}/projects/{slug}"
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
@@ -17,7 +17,7 @@ async def fetch_project_metadata(slug: str):
             raise HTTPException(status_code=404, detail="Project not found")
         return response.json()
 
-async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None, limit: int = 10, offset: int = 0):
+async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None, limit: int = 10, offset: int = 0) -> tuple[dict[str, any], dict[str, any]]:
     """
     Fetch versions of a specific plugin (slug) from the Hangar API with pagination.
     :param slug: The slug of the project.
@@ -49,7 +49,7 @@ async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] 
 
 # Fetch specific version metadata from the Hangar API, with caching
 @cache(expire=settings.hangar.cache_version_expiration)
-async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None):
+async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None) -> list[dict[str, any]]:
     """
     Fetch versions of a specific plugin (slug) from the Hangar API with pagination.
     :param slug: The slug of the project.
@@ -77,7 +77,7 @@ async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] =
 
 # Fetch specific version metadata from the Hangar API, with caching
 @cache(expire=settings.hangar.cache_version_expiration)
-async def fetch_version_metadata(slug: str, version: str):
+async def fetch_version_metadata(slug: str, version: str) -> dict[str, any]:
     """
     Fetch metadata for a specific version of a plugin from the Hangar API.
     :param slug: The slug of the project.
@@ -92,7 +92,7 @@ async def fetch_version_metadata(slug: str, version: str):
             raise HTTPException(status_code=404, detail="Version not found")
         return response.json()
 
-def get_version_download_url(slug: str, platform: platform_type, version: str):
+def get_version_download_url(slug: str, platform: platform_type, version: str) -> str:
     """
     Returns the download URL for a specific version of a plugin from the Hangar API.
     :param slug: The slug of the project.
