@@ -2,7 +2,7 @@ ARG UNIT_VARIANT=1.33.0-python3.12-slim
 
 # Initialize virtual environement in a separate build image
 # We want to minimize work in target platform image as much as possible as it may run under emulation
-FROM unit:${UNIT_VARIANT} AS builder
+FROM --platform=$BUILDPLATFORM unit:${UNIT_VARIANT} AS builder-native
 LABEL stage=builder
 
 # Copy application files
@@ -22,10 +22,10 @@ RUN /bin/bash -c "source /venv/bin/activate && pip install ."
 FROM --platform=$TARGETPLATFORM unit:${UNIT_VARIANT}
 
 # Copy application files from build image
-COPY --from=builder /app /app
+COPY --from=builder-native /app /app
 
 # Copy virtual environment from build image
-COPY --from=builder /venv /app/venv
+COPY --from=builder-native /venv /app/venv
 
 # Copy NGINX Unit configuration
 COPY ./nginx/* /docker-entrypoint.d/
