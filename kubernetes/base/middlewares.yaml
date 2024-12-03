@@ -1,7 +1,0 @@
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: hangar-maven-bridge-basic-auth
-spec:
-  basicAuth:
-    secret: hangar-maven-bridge-basic-auth-users

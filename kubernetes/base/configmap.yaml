@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: hangar-maven-bridge-config
-data:
-  BRIDGE_CACHE__BACKEND: 'inmemory'
