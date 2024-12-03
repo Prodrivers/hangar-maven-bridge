@@ -1,4 +1,4 @@
-# hangar-maven-bridge
+# minecraft-maven-bridge
 
 A bridge application that exposes PaperMC's Hangar as a Maven repository, so that plugins can be managed as dependencies using standard Java tools.
 

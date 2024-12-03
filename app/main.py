@@ -7,7 +7,7 @@ from fastapi_cache import FastAPICache
 from app.routers import api_router, tags_metadata
 from app.settings import settings
 
-title = "hangar-maven-bridge"
+title = "minecraft-maven-bridge"
 version = "1.0.0"
 description = "A bridge application that exposes PaperMC's Hangar as a Maven repository."
 contact = {

@@ -12,7 +12,7 @@ on:
     types: [ dependency_commit ]
 
 env:
-  REGISTRY_REPOSITORY_NAME: hangar-maven-bridge
+  REGISTRY_REPOSITORY_NAME: minecraft-maven-bridge
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}

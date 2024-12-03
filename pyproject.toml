@@ -1,5 +1,5 @@
 [project]
-name = "hangar-maven-bridge"
+name = "minecraft-maven-bridge"
 description = "A bridge application that exposes PaperMC's Hangar as a Maven repository."
 version = "1.0.0"
 authors = [{name = "Prodrivers", email = "sources@prodrivers.fr"}]
