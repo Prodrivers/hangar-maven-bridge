@@ -1,6 +1,6 @@
 import logging
-
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi_cache import FastAPICache
 
@@ -20,6 +20,7 @@ license_info = {
 }
 
 logger = logging.getLogger(__name__)
+
 
 # Lifespan handler to initialize FastAPICache
 @asynccontextmanager
@@ -45,6 +46,7 @@ async def lifespan(app: FastAPI):
     # Control passes here during the app lifespan
     yield
 
+
 # Initialize app with lifespan
 app = FastAPI(
     title=title,
@@ -59,9 +61,12 @@ app = FastAPI(
 
 app.include_router(api_router)
 
+
 @app.get("/")
 async def root():
-    return {"message": f"Hello from {title} v{version} by {contact['name']}!"}
+    return {"message": f"Hello from {title} v{version} by {contact['name']}!", "title": title, "version": version,
+            "description": description, "contact": contact, "license_info": license_info}
+
 
 if __name__ == '__main__':
     import uvicorn
