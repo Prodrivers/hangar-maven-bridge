@@ -16,11 +16,11 @@ tags_metadata = [
         "description": "Uncategorized operations.",
     },
     {
-        "name": "with_platform_and_channel",
-        "description": "Maven Repository URL implementation that uses both platform and version channel in group ID.",
+        "name": "hangar_with_platform_and_channel",
+        "description": "Maven Repository URL implementation for PaperMC's Hangar that uses both platform and version channel in group ID.",
     },
     {
-        "name": "with_platform",
-        "description": "Maven Repository URL implementation that uses platform in group ID.",
+        "name": "hangar_with_platform",
+        "description": "Maven Repository URL implementation for PaperMC's Hangar that uses platform in group ID.",
     }
 ]
