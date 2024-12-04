@@ -1,6 +1,7 @@
 # minecraft-maven-bridge
 
-A bridge application that exposes PaperMC's Hangar as a Maven repository, so that plugins can be managed as dependencies using standard Java tools.
+A bridge application that exposes several Minecraft-related services as a Maven repository, so that plugins can be
+managed as dependencies using standard Java tools.
 
 ## Features
 
@@ -12,16 +13,23 @@ A bridge application that exposes PaperMC's Hangar as a Maven repository, so tha
   * Supports the following loaders: paper, velocity, waterfall, bungeecord, minecraft, fabric, forge, sponge and folia.
   * Alpha versions reported according to Maven conventions as -SNAPSHOT.
 
-Note: this bridge does not have support for authentication. If you want to limit usage of your instance, please protect
-it with a reverse proxy.
-
 ## Usage
 
 Use the Docker image with port 80, or install dependencies using `pip install .` and run with Python `app/main.py`.
 
+Running the app directly should be reserved for development usage as it only use uvicorn as web server. Place it behind
+a reverse proxy, or use the Docker image for production, as it uses nginx Unit, a combined application server and
+reverse proxy. You may configure nginx Unit by modifying `nginx/.unit.conf.json` or by overriding the included image's
+configuration at `/docker-entrypoint.d/.unit.conf.json`.
+
 The Maven repository is accessible at sub-path `/repository/`.
 
-You can also access the API documentation at `/docs`.
+You can also access the API documentation with an interactive UI at `/docs/`.
+
+## Authentication
+
+This bridge does not have support for authentication. If you want to limit usage of your instance, please protect it
+with a reverse proxy, such as Docker image's nginx Unit.
 
 ## Caching
 
