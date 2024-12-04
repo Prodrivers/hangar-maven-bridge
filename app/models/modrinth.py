@@ -1,7 +1,7 @@
 from datetime import datetime
+from typing import List, Optional, Literal
 
 from pydantic import BaseModel, HttpUrl
-from typing import List, Optional, Literal
 
 DependencyType = Literal["required", "optional", "incompatible", "embedded"]
 FileType = Literal["required-resource-pack", "optional-resource-pack"]
@@ -10,9 +10,11 @@ RequestedStatus = Literal["listed", "archived", "draft", "unlisted"]
 Status = Literal["listed", "archived", "draft", "unlisted", "scheduled", "unknown"]
 VersionType = Literal["release", "beta", "alpha", "unlisted", "scheduled", "unknown"]
 
+
 class FileHashes(BaseModel):
     sha512: str
     sha1: str
+
 
 class File(BaseModel):
     hashes: FileHashes
@@ -22,11 +24,13 @@ class File(BaseModel):
     size: int
     file_type: Optional[FileType]
 
+
 class Dependency(BaseModel):
     version_id: Optional[str]
     project_id: Optional[str]
     file_name: Optional[str]
     dependency_type: DependencyType
+
 
 class Version(BaseModel):
     name: str
@@ -47,18 +51,23 @@ class Version(BaseModel):
     changelog_url: Optional[str]
     files: List[File]
 
+
 class ExpandedDependency(Dependency, Version):
     pass
 
+
 from pydantic import BaseModel
 from typing import Optional
+
 
 class License(BaseModel):
     id: str
     name: str
     url: Optional[str]
 
+
 from datetime import datetime
+
 
 class GalleryImage(BaseModel):
     url: str
@@ -68,9 +77,11 @@ class GalleryImage(BaseModel):
     created: datetime
     ordering: int
 
+
 class ModeratorMessage(BaseModel):
     message: str
     body: Optional[str]
+
 
 class Project(BaseModel):
     id: str

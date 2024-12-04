@@ -3,9 +3,11 @@ from typing import Literal, Optional
 import httpx
 from fastapi import HTTPException
 from fastapi_cache.decorator import cache
+
 from app.settings import settings
 
 platform_type = Literal["paper", "velocity", "waterfall"]
+
 
 # Fetch project metadata from the Hangar API, with caching
 @cache(expire=settings.hangar.cache_project_expiration)
@@ -17,7 +19,9 @@ async def fetch_project_metadata(slug: str) -> dict[str, any]:
             raise HTTPException(status_code=404, detail="Project not found")
         return response.json()
 
-async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None, limit: int = 10, offset: int = 0) -> tuple[dict[str, any], dict[str, any]]:
+
+async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None,
+                                   limit: int = 10, offset: int = 0) -> tuple[dict[str, any], dict[str, any]]:
     """
     Fetch versions of a specific plugin (slug) from the Hangar API with pagination.
     :param slug: The slug of the project.
@@ -47,9 +51,11 @@ async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] 
 
     return data['result'], data['pagination']
 
+
 # Fetch specific version metadata from the Hangar API, with caching
 @cache(expire=settings.hangar.cache_version_expiration)
-async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None) -> list[dict[str, any]]:
+async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None) -> \
+list[dict[str, any]]:
     """
     Fetch versions of a specific plugin (slug) from the Hangar API with pagination.
     :param slug: The slug of the project.
@@ -63,7 +69,8 @@ async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] =
     all_versions = []
 
     while True:
-        versions, pagination = await fetch_paginated_versions(slug=slug, platform=platform, channel=channel, limit=limit, offset=offset)
+        versions, pagination = await fetch_paginated_versions(slug=slug, platform=platform, channel=channel,
+                                                              limit=limit, offset=offset)
         all_versions.extend(versions)
 
         # Check if there are no more pages to fetch or that we will go over the number of versions to fetch
@@ -74,6 +81,7 @@ async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] =
         offset += limit
 
     return all_versions
+
 
 # Fetch specific version metadata from the Hangar API, with caching
 @cache(expire=settings.hangar.cache_version_expiration)
@@ -91,6 +99,7 @@ async def fetch_version_metadata(slug: str, version: str) -> dict[str, any]:
         if response.status_code == 404:
             raise HTTPException(status_code=404, detail="Version not found")
         return response.json()
+
 
 def get_version_download_url(slug: str, platform: platform_type, version: str) -> str:
     """
