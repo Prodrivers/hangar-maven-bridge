@@ -1,8 +1,8 @@
 from typing import Literal, Optional
 
 import httpx
+from aiocache import cached
 from fastapi import HTTPException
-from fastapi_cache.decorator import cache
 
 from app.settings import settings
 
@@ -10,7 +10,7 @@ platform_type = Literal["paper", "velocity", "waterfall"]
 
 
 # Fetch project metadata from the Hangar API, with caching
-@cache(expire=settings.hangar.cache_project_expiration)
+@cached(ttl=settings.hangar.cache_project_expiration_seconds)
 async def fetch_project_metadata(slug: str) -> dict[str, any]:
     url = f"{settings.hangar.api_base_url}/projects/{slug}"
     async with httpx.AsyncClient() as client:
@@ -20,6 +20,7 @@ async def fetch_project_metadata(slug: str) -> dict[str, any]:
         return response.json()
 
 
+@cached(ttl=settings.hangar.cache_version_expiration_seconds)
 async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None,
                                    limit: int = 10, offset: int = 0) -> tuple[dict[str, any], dict[str, any]]:
     """
@@ -53,9 +54,9 @@ async def fetch_paginated_versions(slug: str, platform: Optional[platform_type] 
 
 
 # Fetch specific version metadata from the Hangar API, with caching
-@cache(expire=settings.hangar.cache_version_expiration)
+@cached(ttl=settings.hangar.cache_version_expiration_seconds)
 async def fetch_versions_metadata(slug: str, platform: Optional[platform_type] = None, channel: Optional[str] = None) -> \
-list[dict[str, any]]:
+        list[dict[str, any]]:
     """
     Fetch versions of a specific plugin (slug) from the Hangar API with pagination.
     :param slug: The slug of the project.
@@ -84,7 +85,7 @@ list[dict[str, any]]:
 
 
 # Fetch specific version metadata from the Hangar API, with caching
-@cache(expire=settings.hangar.cache_version_expiration)
+@cached(ttl=settings.hangar.cache_version_expiration_seconds)
 async def fetch_version_metadata(slug: str, version: str) -> dict[str, any]:
     """
     Fetch metadata for a specific version of a plugin from the Hangar API.

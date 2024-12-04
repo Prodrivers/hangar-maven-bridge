@@ -1,15 +1,22 @@
 from typing import Optional
 
-from fastapi import HTTPException, APIRouter
-from starlette.responses import RedirectResponse
+from fastapi import HTTPException, APIRouter, Depends
+from starlette.requests import Request
+from starlette.responses import RedirectResponse, Response
 
 from app.hangar import platform_type, get_version_download_url
+from app.settings import settings
 
-router = APIRouter()
+
+async def cache_control(request: Request, response: Response):
+    response.headers.update({"Cache-Control": f"public, max-age={settings.cache.jar_expiration_seconds}"})
 
 
-@router.get("/repository/io/papermc/hangar/{platform}/{slug}/{version}/{filename}.jar", response_class=RedirectResponse,
-            tags=["hangar_with_platform"])
+router = APIRouter(dependencies=[Depends(cache_control)])
+
+
+@router.get("/repository/io/papermc/hangar/{platform}/{slug}/{version}/{filename}.jar",
+            response_class=RedirectResponse, tags=["hangar_with_platform"])
 async def get_jar_with_platform(platform: platform_type, slug: str, version: str, filename: str) -> RedirectResponse:
     return await get_jar_with_platform_and_channel(platform=platform, channel=None, slug=slug, version=version,
                                                    filename=filename)

@@ -1,19 +1,23 @@
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
-from fastapi_cache.decorator import cache
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi_xml import XmlAppResponse
+from starlette.requests import Request
 from starlette.responses import Response
 
 from app.hangar import platform_type, fetch_version_metadata
 from app.settings import settings
 
-router = APIRouter()
+
+async def cache_control(request: Request, response: Response):
+    response.headers.update({"Cache-Control": f"public, max-age={settings.cache.pom_expiration_seconds}"})
+
+
+router = APIRouter(dependencies=[Depends(cache_control)])
 
 
 @router.get("/repository/io/papermc/hangar/{platform}/{channel}/{slug}/{version}/{filename}.pom",
             response_class=XmlAppResponse, tags=["hangar_with_platform_and_channel"])
-@cache(expire=settings.cache.pom_expiration)
 async def get_pom_with_platform_and_channel(platform: platform_type, slug: str, channel: Optional[str], version: str,
                                             filename: str) -> Response:
     # Check that the filename matches the pattern "{slug}-{version}.pom"
@@ -54,7 +58,6 @@ async def get_pom_with_platform_and_channel(platform: platform_type, slug: str, 
 
 @router.get("/repository/io/papermc/hangar/{platform}/{slug}/{version}/{filename}.pom", response_class=XmlAppResponse,
             tags=["hangar_with_platform"])
-@cache(expire=settings.cache.pom_expiration)
 async def get_pom_with_platform(platform: platform_type, slug: str, version: str, filename: str) -> Response:
     return await get_pom_with_platform_and_channel(platform=platform, channel=None, slug=slug, version=version,
                                                    filename=filename)
@@ -62,7 +65,6 @@ async def get_pom_with_platform(platform: platform_type, slug: str, version: str
 
 @router.head("/repository/io/papermc/hangar/{platform}/{channel}/{slug}/{version}/{filename}.pom",
              tags=["hangar_with_platform_and_channel"])
-@cache(expire=settings.cache.pom_expiration)
 async def head_pom_with_platform_and_channel(
         platform: platform_type,
         channel: Optional[str],
@@ -93,7 +95,6 @@ async def head_pom_with_platform_and_channel(
 
 
 @router.head("/repository/io/papermc/hangar/{platform}/{slug}/{version}/{filename}.pom", tags=["hangar_with_platform"])
-@cache(expire=settings.cache.pom_expiration)
 async def head_pom_with_platform(platform: platform_type, slug: str, version: str, filename: str) -> Response:
     return await head_pom_with_platform_and_channel(platform=platform, channel=None, slug=slug, version=version,
                                                     filename=filename)

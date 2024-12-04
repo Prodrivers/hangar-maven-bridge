@@ -2,11 +2,13 @@ import asyncio
 from typing import Optional, List
 
 import httpx
+from aiocache import cached
 
 from app.models.modrinth import Version, Dependency, ExpandedDependency, Project
 from app.settings import settings
 
 
+@cached(ttl=settings.modrinth.cache_project_expiration_seconds)
 async def fetch_modrinth_project(project_id_or_slug: str) -> Optional[Project]:
     """
     Fetch Modrinth project's metadata.
@@ -27,6 +29,7 @@ async def fetch_modrinth_project(project_id_or_slug: str) -> Optional[Project]:
     return None
 
 
+@cached(ttl=settings.modrinth.cache_version_expiration_seconds)
 async def fetch_modrinth_project_versions_for_loader(project_id_or_slug: str, loader: str) -> List[Version]:
     """
     Fetch Modrinth project's versions metadata for a specific loader.
@@ -51,6 +54,7 @@ async def fetch_modrinth_project_versions_for_loader(project_id_or_slug: str, lo
     return []
 
 
+@cached(ttl=settings.modrinth.cache_version_expiration_seconds)
 async def fetch_modrinth_version_dependency(dependency: Dependency, depth: int) -> ExpandedDependency | Dependency:
     """
     Expand a Modrinth version dependency to include full metadata.
@@ -111,6 +115,7 @@ async def fetch_modrinth_version_dependencies(dependencies: list[Dependency], de
         *[fetch_modrinth_version_dependency(dependency=dependency, depth=depth) for dependency in dependencies])
 
 
+@cached(ttl=settings.modrinth.cache_version_expiration_seconds)
 async def fetch_modrinth_project_version(project_id_or_slug: str, version_id_or_number: str,
                                          expand_dependencies_depth: int = 1) -> Optional[Version]:
     """

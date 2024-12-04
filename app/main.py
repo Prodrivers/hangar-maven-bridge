@@ -1,8 +1,6 @@
 import logging
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi_cache import FastAPICache
 
 from app.routers import api_router, tags_metadata
 from app.settings import settings
@@ -21,32 +19,6 @@ license_info = {
 
 logger = logging.getLogger(__name__)
 
-
-# Lifespan handler to initialize FastAPICache
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    if settings.cache.backend == 'redis':
-        logger.info("Using Redis as cache backend.")
-
-        import redis.asyncio as redis
-        from redis.asyncio.connection import ConnectionPool
-        from fastapi_cache.backends.redis import RedisBackend
-
-        pool = ConnectionPool.from_url(url=settings.cache.redis_url)
-        redis = redis.Redis(connection_pool=pool)
-        backend = RedisBackend(redis)
-    else:
-        logger.info("Using in-memory cache backend.")
-
-        from fastapi_cache.backends.inmemory import InMemoryBackend
-
-        backend = InMemoryBackend()
-    FastAPICache.init(backend=backend, prefix=settings.cache.prefix)
-
-    # Control passes here during the app lifespan
-    yield
-
-
 # Initialize app with lifespan
 app = FastAPI(
     title=title,
@@ -55,8 +27,7 @@ app = FastAPI(
     contact=contact,
     license_info=license_info,
     debug=settings.debug,
-    openapi_tags=tags_metadata,
-    lifespan=lifespan
+    openapi_tags=tags_metadata
 )
 
 app.include_router(api_router)
