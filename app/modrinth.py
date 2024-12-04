@@ -135,10 +135,12 @@ async def fetch_modrinth_project_version(project_id_or_slug: str, version_id_or_
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         if response.status_code == 200:
-            version = Version(**response.json())
+            data = response.json()
             if expand_dependencies_depth <= 0:
-                return version
-            version.dependencies = await fetch_modrinth_version_dependencies(dependencies=version.dependencies,
-                                                                             depth=expand_dependencies_depth)
-            return version
+                return Version(**data)
+            dependencies = [Dependency(**dependency) for dependency in data['dependencies']]
+            expanded_dependencies = await fetch_modrinth_version_dependencies(dependencies=dependencies,
+                                                                              depth=expand_dependencies_depth)
+            data['dependencies'] = expanded_dependencies
+            return Version(**data)
     return None

@@ -15,6 +15,9 @@ class FileHashes(BaseModel):
     sha512: str
     sha1: str
 
+    class Config:
+        frozen = True
+
 
 class File(BaseModel):
     hashes: FileHashes
@@ -24,12 +27,18 @@ class File(BaseModel):
     size: int
     file_type: Optional[FileType]
 
+    class Config:
+        frozen = True
+
 
 class Dependency(BaseModel):
     version_id: Optional[str]
     project_id: Optional[str]
     file_name: Optional[str]
     dependency_type: DependencyType
+
+    class Config:
+        frozen = True
 
 
 class Version(BaseModel):
@@ -51,13 +60,13 @@ class Version(BaseModel):
     changelog_url: Optional[str]
     files: List[File]
 
+    class Config:
+        frozen = True
+
 
 class ExpandedDependency(Dependency, Version):
-    pass
-
-
-from pydantic import BaseModel
-from typing import Optional
+    class Config:
+        frozen = True
 
 
 class License(BaseModel):
@@ -65,8 +74,8 @@ class License(BaseModel):
     name: str
     url: Optional[str]
 
-
-from datetime import datetime
+    class Config:
+        frozen = True
 
 
 class GalleryImage(BaseModel):
@@ -77,10 +86,16 @@ class GalleryImage(BaseModel):
     created: datetime
     ordering: int
 
+    class Config:
+        frozen = True
+
 
 class ModeratorMessage(BaseModel):
     message: str
     body: Optional[str]
+
+    class Config:
+        frozen = True
 
 
 class Project(BaseModel):
@@ -98,3 +113,6 @@ class Project(BaseModel):
     game_versions: List[str]
     loaders: List[Loader]
     gallery: List[GalleryImage]
+
+    class Config:
+        frozen = True
