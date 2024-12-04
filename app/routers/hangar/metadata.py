@@ -1,20 +1,22 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import Response
-from datetime import datetime
-
 from fastapi_cache.decorator import cache
 from fastapi_xml import XmlAppResponse
+from starlette.responses import Response
 
-from app.hangar import fetch_versions_metadata, platform_type
+from app.hangar import platform_type, fetch_versions_metadata
 from app.settings import settings
 
 router = APIRouter()
 
-@router.get("/repository/io/papermc/hangar/{platform}/{channel}/{slug}/maven-metadata.xml", response_class=XmlAppResponse, tags=["hangar_with_platform_and_channel"])
+
+@router.get("/repository/io/papermc/hangar/{platform}/{channel}/{slug}/maven-metadata.xml",
+            response_class=XmlAppResponse, tags=["hangar_with_platform_and_channel"])
 @cache(expire=settings.cache.metadata_expiration)
-async def get_maven_metadata_with_platform_and_channel(platform: platform_type, slug: str, channel: Optional[str]) -> Response:
+async def get_maven_metadata_with_platform_and_channel(platform: platform_type, slug: str,
+                                                       channel: Optional[str]) -> Response:
     versions = await fetch_versions_metadata(slug=slug, platform=platform, channel=channel)
 
     # Validate the number of versions
@@ -54,7 +56,9 @@ async def get_maven_metadata_with_platform_and_channel(platform: platform_type, 
 """
     return Response(content=metadata.strip(), media_type="application/xml")
 
-@router.get("/repository/io/papermc/hangar/{platform}/{slug}/maven-metadata.xml", response_class=XmlAppResponse, tags=["hangar_with_platform"])
+
+@router.get("/repository/io/papermc/hangar/{platform}/{slug}/maven-metadata.xml", response_class=XmlAppResponse,
+            tags=["hangar_with_platform"])
 @cache(expire=settings.cache.metadata_expiration)
 async def get_maven_metadata_with_platform(platform: platform_type, slug: str) -> Response:
     return await get_maven_metadata_with_platform_and_channel(platform=platform, channel=None, slug=slug)
