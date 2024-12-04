@@ -15,10 +15,14 @@ class Hangar(BaseModel):
     versions_limit_per_batch: int = 20
     versions_total_to_fetch: int = 20
 
+class Modrinth(BaseModel):
+    api_base_url: str = 'https://api.modrinth.com/v2'
+
 class Settings(BaseSettings):
     debug: bool = False
     cache: Cache = Cache()
     hangar: Hangar = Hangar()
+    modrinth: Modrinth = Modrinth()
 
     model_config = SettingsConfigDict(env_prefix='BRIDGE_', env_file='.env', env_nested_delimiter='__')
 

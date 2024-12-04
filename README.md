@@ -5,8 +5,12 @@ A bridge application that exposes PaperMC's Hangar as a Maven repository, so tha
 ## Features
 
 * Exposes Hangar resources as Maven resources, using the "io.papermc.hangar.<platform>" group ID.
-* Supports Paper, Velocity and Waterfall resources.
-* Supports release channels: append ".<channel>" to the group ID.
+  * Supports the following platforms: paper, velocity and waterfall.
+  * Supports release channels: append ".<channel>" to the group ID.
+
+* Exposes Modrinth resources as Maven resources, using the "com.modrinth.<loader>" group ID.
+  * Supports the following loaders: paper, velocity, waterfall, bungeecord, minecraft, fabric, forge, sponge and folia.
+  * Alpha versions reported according to Maven conventions as -SNAPSHOT.
 
 Note: this bridge does not have support for authentication. If you want to limit usage of your instance, please protect it with a reverse proxy.
 
@@ -27,6 +31,7 @@ Configuration is done using variable environment or a `.env` file. All variables
 * `BRIDGE_HANGAR__CACHE_VERSION_EXPIRATION`: How many seconds Hangar resource versions will be kept in cache
 * `BRIDGE_HANGAR__VERSIONS_LIMIT_PER_BATCH`: The number of versions to fetch in a single batch from the Hangar API
 * `BRIDGE_HANGAR__VERSIONS_TOTAL_TO_FETCH`: The total number of versions to fetch from the Hangar API
+* `BRIDGE_MODRINTH__API_BASE_URL`: Modrinth's API base URL. Only supports API `v2`. Defaults to `https://api.modrinth.com/v2`.
 * `BRIDGE_CACHE__BACKEND`: Cache backend to use, either `inmemory` or `redis`
 * `BRIDGE_CACHE__REDIS_URL`: Redis URl to use when cache backend is redis.
 * `BRIDGE_CACHE__PREFIX`: Prefix of bridge's data in cache backend
