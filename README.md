@@ -24,16 +24,17 @@ You can also access the API documentation at `/docs`.
 
 ## Configuration
 
-Configuration is done using variable environment or a `.env` file. All variables are prefixed with `BRIDGE_`.
+Configuration is done using variable environment or a `.env` file. All variables are prefixed with `MC_MAVEN_BRIDGE__`.
 
-* `BRIDGE_HANGAR__API_BASE_URL`: Hangar's API base URL. Only supports API `v1`. Defaults to `https://hangar.papermc.io/api/v1`.
-* `BRIDGE_HANGAR__CACHE_PROJECT_EXPIRATION`: How many seconds Hangar projects will be kept in cache
-* `BRIDGE_HANGAR__CACHE_VERSION_EXPIRATION`: How many seconds Hangar resource versions will be kept in cache
-* `BRIDGE_HANGAR__VERSIONS_LIMIT_PER_BATCH`: The number of versions to fetch in a single batch from the Hangar API
-* `BRIDGE_HANGAR__VERSIONS_TOTAL_TO_FETCH`: The total number of versions to fetch from the Hangar API
-* `BRIDGE_MODRINTH__API_BASE_URL`: Modrinth's API base URL. Only supports API `v2`. Defaults to `https://api.modrinth.com/v2`.
-* `BRIDGE_CACHE__BACKEND`: Cache backend to use, either `inmemory` or `redis`
-* `BRIDGE_CACHE__REDIS_URL`: Redis URl to use when cache backend is redis.
-* `BRIDGE_CACHE__PREFIX`: Prefix of bridge's data in cache backend
-* `BRIDGE_CACHE__POM_EXPIRATION`: How many seconds computed POM for a resource should be kept in cache
-* `BRIDGE_CACHE__METADATA_EXPIRATION`: How many seconds computed metadata (essentially version list) for a resource should be kept in cache
+* `MC_MAVEN_BRIDGE__DEBUG`: Enable debug information in output. Should NEVER be true in production!
+* `MC_MAVEN_BRIDGE__HANGAR__API_BASE_URL`: Hangar's API base URL. Only supports API `v1`. Defaults to `https://hangar.papermc.io/api/v1`.
+* `MC_MAVEN_BRIDGE__HANGAR__CACHE_PROJECT_EXPIRATION`: How many seconds Hangar projects will be kept in cache
+* `MC_MAVEN_BRIDGE__HANGAR__CACHE_VERSION_EXPIRATION`: How many seconds Hangar resource versions will be kept in cache
+* `MC_MAVEN_BRIDGE__HANGAR__VERSIONS_LIMIT_PER_BATCH`: The number of versions to fetch in a single batch from the Hangar API
+* `MC_MAVEN_BRIDGE__HANGAR__VERSIONS_TOTAL_TO_FETCH`: The total number of versions to fetch from the Hangar API
+* `MC_MAVEN_BRIDGE__MODRINTH__API_BASE_URL`: Modrinth's API base URL. Only supports API `v2`. Defaults to `https://api.modrinth.com/v2`.
+* `MC_MAVEN_BRIDGE__CACHE__BACKEND`: Cache backend to use, either `inmemory` or `redis`
+* `MC_MAVEN_BRIDGE__CACHE__REDIS_URL`: Redis URl to use when cache backend is redis.
+* `MC_MAVEN_BRIDGE__CACHE__PREFIX`: Prefix of bridge's data in cache backend
+* `MC_MAVEN_BRIDGE__CACHE__POM_EXPIRATION`: How many seconds computed POM for a resource should be kept in cache
+* `MC_MAVEN_BRIDGE__CACHE__METADATA_EXPIRATION`: How many seconds computed metadata (essentially version list) for a resource should be kept in cache

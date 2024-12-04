@@ -24,6 +24,6 @@ class Settings(BaseSettings):
     hangar: Hangar = Hangar()
     modrinth: Modrinth = Modrinth()
 
-    model_config = SettingsConfigDict(env_prefix='BRIDGE_', env_file='.env', env_nested_delimiter='__')
+    model_config = SettingsConfigDict(env_prefix='MC_MAVEN_BRIDGE__', env_file='.env', env_nested_delimiter='__')
 
 settings = Settings()
